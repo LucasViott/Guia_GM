@@ -1,0 +1,6 @@
+{
+  "name": "Guia de Atendimento e Negociação - GM Financial & Bulgarelli",
+  "description": "Plataforma operacional completa e inteligente para operadores de cobrança da GM Financial e Bulgarelli Advogados com script linear guiado, matriz de qualidade NCG, quebra de objeções e pesquisa instantânea.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
