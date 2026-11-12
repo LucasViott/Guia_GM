@@ -1,0 +1,2429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Atendimento e Negociação - GM Financial / Bulgarelli</title>
+    <!-- Fonte Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #005ce6;
+            --primary-dark: #0044b3;
+            --primary-light: #e6f0ff;
+            --primary-border: #bfdbfe;
+            --bg-grad-start: #f8fafc;
+            --bg-grad-end: #dbeafe;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: rgba(255, 255, 255, 0.96);
+            --border-ui: rgba(226, 232, 240, 0.9);
+            --sidebar-w: 270px;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --danger-border: #fca5a5;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --warning: #f59e0b;
+            --warning-bg: #fffbeb;
+            --warning-border: #fde68a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-grad-start) 0%, var(--bg-grad-end) 100%);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            position: relative;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Pontilhado Fino em Branco */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.95) 1.2px, transparent 1.2px);
+            background-size: 16px 16px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* BARRA LATERAL ESQUERDA */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(14px);
+            border-right: 1px solid var(--border-ui);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.04);
+            z-index: 40;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.sidebar-closed .sidebar {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-brand {
+            padding: 22px 20px;
+            border-bottom: 1px solid var(--border-ui);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-brand-badge {
+            background: var(--primary);
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 6px 10px;
+            border-radius: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-brand-text h2 {
+            font-size: 1.05rem;
+            color: var(--primary);
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .sidebar-brand-text span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .nav-links {
+            padding: 16px 10px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-main);
+            padding: 13px 16px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.92rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 6px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--primary);
+            transform: translateX(3px);
+        }
+
+        .nav-link.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(0, 92, 230, 0.25);
+        }
+
+        .nav-link.active svg {
+            stroke: #fff;
+        }
+
+        /* ÁREA PRINCIPAL */
+        .main-wrapper {
+            margin-left: var(--sidebar-w);
+            width: calc(100% - var(--sidebar-w));
+            height: 100vh;
+            overflow-y: auto;
+            position: relative;
+            transition: margin-left 0.35s ease, width 0.35s ease;
+            scroll-behavior: smooth;
+        }
+
+        body.sidebar-closed .main-wrapper {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        /* CABEÇALHO FIXO */
+        .top-header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            padding: 14px 32px;
+            z-index: 30;
+            border-bottom: 1px solid var(--border-ui);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .toggle-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 92, 230, 0.2);
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .toggle-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .header-logo {
+            height: 38px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            background: #fff;
+            padding: 2px 4px;
+            flex-shrink: 0;
+        }
+
+        .btn-mural-trigger {
+            background: #fff;
+            border: 1px solid var(--border-ui);
+            color: var(--primary);
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            transition: all 0.2s;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .btn-mural-trigger:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-border);
+        }
+
+        .search-box-wrapper {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .search-box-wrapper svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            stroke: var(--text-muted);
+            width: 18px;
+            height: 18px;
+            pointer-events: none;
+        }
+
+        .search-box-wrapper input {
+            width: 100%;
+            padding: 11px 16px 11px 42px;
+            font-size: 0.92rem;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-box-wrapper input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 92, 230, 0.15);
+            background: #fff;
+        }
+
+        /* CONTEÚDO */
+        .content-container {
+            padding: 24px 32px 60px 32px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* Substituição Limpa de Telas */
+        .segment-view {
+            display: none !important;
+            animation: fadeInView 0.25s ease;
+        }
+
+        .segment-view.active {
+            display: block !important;
+        }
+
+        @keyframes fadeInView {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .segment-header {
+            margin-bottom: 22px;
+        }
+
+        .segment-header h1 {
+            font-size: 1.85rem;
+            color: var(--primary);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .segment-header p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            margin-top: 4px;
+        }
+
+        /* CARDS / BLOCOS SEPARADOS */
+        .card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 24px 28px;
+            border: 1px solid var(--border-ui);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+            margin-bottom: 22px;
+            backdrop-filter: blur(10px);
+        }
+
+        .card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border-ui);
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card h4 {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 14px 0 6px 0;
+        }
+
+        .card ul, .card ol {
+            padding-left: 20px;
+            color: #334155;
+            line-height: 1.7;
+            font-size: 0.92rem;
+        }
+
+        .card ul li, .card ol li {
+            margin-bottom: 7px;
+        }
+
+        .card strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .search-badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 0.72rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        /* ESTRUTURA DO ROTEIRO: FALA À ESQUERDA + ALERTA DE MONITORIA AO LADO */
+        .script-grid-row {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 1024px) {
+            .script-grid-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .speech-box {
+            background: #f0f7ff;
+            border-left: 4px solid var(--primary);
+            padding: 18px 22px;
+            border-radius: 0 10px 10px 0;
+            font-size: 0.95rem;
+            line-height: 1.68;
+            color: #1e3a8a;
+            box-shadow: 0 2px 8px rgba(0, 92, 230, 0.04);
+        }
+
+        .speech-box::before {
+            content: "🗣️ FALA SUGERIDA AO AGENTE:";
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        /* PEQUENOS ALERTAS DE MONITORIA AO LADO DO ROTEIRO */
+        .script-side-alert {
+            background: #ffffff;
+            border: 1.5px solid var(--warning-border);
+            border-left: 5px solid #d97706;
+            border-radius: 12px;
+            padding: 16px 18px;
+            box-shadow: 0 4px 14px rgba(217, 119, 6, 0.08);
+            font-size: 0.85rem;
+            color: #78350f;
+            line-height: 1.5;
+        }
+
+        .script-side-alert.critical {
+            border-color: var(--danger-border);
+            border-left-color: var(--danger);
+            background: #fff8f8;
+            color: #7f1d1d;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.08);
+        }
+
+        .script-side-alert.info {
+            border-color: var(--primary-border);
+            border-left-color: var(--primary);
+            background: #f8fbff;
+            color: #0c4a6e;
+            box-shadow: 0 4px 14px rgba(0, 92, 230, 0.08);
+        }
+
+        .side-alert-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+        }
+
+        .side-alert-title {
+            font-size: 0.76rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .side-alert-badge {
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .side-alert-badge.warn { background: #fef3c7; color: #b45309; }
+        .side-alert-badge.crit { background: #fee2e2; color: #dc2626; }
+        .side-alert-badge.inf { background: #e0f2fe; color: #0284c7; }
+
+        .side-alert-list {
+            list-style: none;
+            padding-left: 0 !important;
+            margin-top: 6px;
+        }
+
+        .side-alert-list li {
+            position: relative;
+            padding-left: 14px;
+            margin-bottom: 5px !important;
+            font-size: 0.83rem;
+            line-height: 1.45;
+        }
+
+        .side-alert-list li::before {
+            content: "•";
+            position: absolute;
+            left: 2px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            line-height: 0.9;
+        }
+
+        .script-side-alert.critical .side-alert-list li::before { color: var(--danger); }
+        .script-side-alert:not(.critical):not(.info) .side-alert-list li::before { color: #d97706; }
+        .script-side-alert.info .side-alert-list li::before { color: var(--primary); }
+
+        .side-alert-highlight {
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        /* SCRIPT LINEAR GUIADO - NÓS */
+        .linear-step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border-ui);
+            margin-bottom: 22px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            overflow-x: auto;
+            gap: 10px;
+        }
+
+        .step-node {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .step-node.active {
+            color: var(--primary);
+        }
+
+        .step-node .node-num {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.76rem;
+        }
+
+        .step-node.active .node-num {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 92, 230, 0.3);
+        }
+
+        .step-node.completed .node-num {
+            background: var(--success);
+            color: #fff;
+        }
+
+        /* SUBTÍTULOS DE CATEGORIA DENTRO DO CATÁLOGO DE OBJEÇÕES */
+        .group-header-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e2e8f0;
+            color: #334155;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            margin: 18px 0 10px 0;
+        }
+
+        /* ÁREA DE SUGESTÕES / PRÓXIMO CAMINHO */
+        .next-path-box {
+            background: #ffffff;
+            border: 1.5px solid var(--primary-border);
+            border-radius: 12px;
+            padding: 18px;
+            margin-top: 18px;
+            box-shadow: 0 4px 12px rgba(0, 92, 230, 0.05);
+        }
+
+        .next-path-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .path-choices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 10px;
+        }
+
+        .path-choice-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 12px 14px;
+            border-radius: 10px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .path-choice-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 92, 230, 0.1);
+        }
+
+        .path-choice-btn .choice-header {
+            font-weight: 700;
+            font-size: 0.88rem;
+            color: #0f172a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .path-choice-btn .choice-desc {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+        }
+
+        /* TABELAS DE MONITORIA */
+        .monitoria-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-top: 12px;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-ui);
+        }
+
+        .monitoria-table th {
+            background: #f1f5f9;
+            color: #475569;
+            font-weight: 700;
+            text-align: left;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-ui);
+            text-transform: uppercase;
+            font-size: 0.74rem;
+        }
+
+        .monitoria-table td {
+            padding: 11px 14px;
+            border-bottom: 1px solid var(--border-ui);
+            color: #334155;
+            line-height: 1.5;
+            vertical-align: top;
+        }
+
+        .peso-pill {
+            display: inline-block;
+            font-weight: 800;
+            font-size: 0.76rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .peso-pill.peso-low { background: #e2e8f0; color: #475569; }
+        .peso-pill.peso-mid { background: #fef3c7; color: #b45309; }
+        .peso-pill.peso-high { background: #fee2e2; color: #dc2626; }
+        .peso-pill.peso-ncg { background: #991b1b; color: #fff; }
+
+        /* TABULAÇÕES EM CARDS */
+        .tabulacao-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px 20px;
+            border: 1px solid var(--border-ui);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            transition: transform 0.2s ease;
+        }
+
+        .tabulacao-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-border);
+        }
+
+        .tab-code {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 800;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+            min-width: 90px;
+            text-align: center;
+        }
+
+        .tab-content h4 {
+            font-size: 0.96rem;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .tab-content p {
+            font-size: 0.86rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        /* MODAL / MURAL DE AVISOS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .modal-overlay.hidden {
+            display: none;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 16px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            position: relative;
+            animation: slideUpModal 0.3s ease;
+        }
+
+        @keyframes slideUpModal {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--border-ui);
+            padding-bottom: 14px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.35rem;
+            color: var(--primary);
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-close-btn {
+            background: #f1f5f9;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .quick-tag-badge {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+            margin: 3px;
+        }
+
+        .quick-tag-badge:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        /* PAINEL DE RESULTADOS DA BUSCA */
+        #search-results-panel {
+            display: none;
+            margin-bottom: 24px;
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-ui);
+        }
+
+        .search-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border-ui);
+            padding-bottom: 10px;
+        }
+
+        .search-results-header h2 {
+            font-size: 1.25rem;
+            color: var(--primary);
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-pattern"></div>
+
+    <!-- MURAL DE AVISOS / MODAL AUTOMÁTICO AO ABRIR O SITE -->
+    <div id="muralModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div>
+                    <h2>📢 Mural Operacional & Principais Buscas</h2>
+                    <span style="font-size:0.82rem; color:var(--text-muted);">GM Financial | Bulgarelli Advogados • Plataforma Integrada</span>
+                </div>
+                <button class="modal-close-btn" onclick="closeMural()">✕</button>
+            </div>
+
+            <!-- Principais Buscas e Atalhos -->
+            <div style="margin-bottom: 20px;">
+                <h4 style="font-size:0.85rem; color:#475569; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">
+                    ⚡ Principais Buscas & Atalhos Rápidos
+                </h4>
+                <div style="display:flex; flex-wrap:wrap;">
+                    <span class="quick-tag-badge" onclick="quickSearch('Antifraude')">🛡️ Antifraude (34191)</span>
+                    <span class="quick-tag-badge" onclick="quickSearch('CAMEC')">⚖️ CAMEC</span>
+                    <span class="quick-tag-badge" onclick="quickSearch('Ajuizamento')">📜 Ajuizamento</span>
+                    <span class="quick-tag-badge" onclick="quickSearch('Desconto progressivo')">📉 Desconto Progressivo</span>
+                    <span class="quick-tag-badge" onclick="quickSearch('Não acordo')">⛔ Não Acordo (Sanções)</span>
+                    <span class="quick-tag-badge" onclick="quickSearch('508')">📞 Queda 508</span>
+                    <span class="quick-tag-badge" onclick="quickSearch('Quita+')">💳 Quita+ (Cartão 21x)</span>
+                    <span class="quick-tag-badge" onclick="quickSearch('Renajud')">🚗 Bloqueio Renajud</span>
+                    <span class="quick-tag-badge" onclick="quickSearch('Falecido')">🕊️ Cliente Falecido</span>
+                    <span class="quick-tag-badge" onclick="quickSearch('MetLife')">💼 MetLife Seguro</span>
+                    <span class="quick-tag-badge" onclick="quickSearch('Mês Invertido')">🔄 Antecipação de Mês</span>
+                    <span class="quick-tag-badge" onclick="quickSearch('Devolução')">🚗 Devolução Amigável</span>
+                    <span class="quick-tag-badge" onclick="quickSearch('Confirmação positiva')">⚠️ Confirmação Positiva (NCG)</span>
+                </div>
+            </div>
+
+            <!-- Atualizações e Destaques Operacionais -->
+            <div style="margin-bottom: 22px;">
+                <h4 style="font-size:0.85rem; color:#475569; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px;">
+                    📌 Atualizações & Diretrizes Críticas da Operação
+                </h4>
+                <ul style="font-size:0.88rem; color:#334155; line-height:1.65; padding-left:18px;">
+                    <li style="margin-bottom:8px;"><strong>Roteiro Linear & Guiado:</strong> Siga a sequência lógica da ligação. Ao terminar cada leitura, clique no botão do próximo caminho conforme a fala do cliente para exibir as argumentações correspondentes.</li>
+                    <li style="margin-bottom:8px;"><strong>Alertas de Monitoria ao Lado do Roteiro:</strong> Cada etapa possui um cartão de alerta lateral para que você visualize imediatamente o que não pode esquecer de confirmar e atualizar.</li>
+                    <li style="margin-bottom:8px;"><strong>Objeções Divididas em 2 Grupos:</strong> Agora no passo 3.2 as opções estão claramente separadas entre <em>Propostas de Negociação</em> e <em>Reclamações do Cliente</em>.</li>
+                    <li style="margin-bottom:8px;"><strong>Segmentação de Não Acordo:</strong> Novo bloco completo detalhando o roteiro de sanções e procedimentos que devemos passar ao cliente caso ele recuse todas as alternativas.</li>
+                    <li style="margin-bottom:8px;"><strong>Termos Jurídicos Individuais:</strong> Cada conceito jurídico agora conta com seu próprio campo exclusivo na aba correspondente.</li>
+                </ul>
+            </div>
+
+            <button onclick="closeMural()" style="width:100%; padding:13px; background:var(--primary); color:#fff; border:none; border-radius:10px; font-weight:700; cursor:pointer; font-size:0.95rem; box-shadow: 0 4px 12px rgba(0, 92, 230, 0.25);">
+                Entendido, Iniciar Atendimento
+            </button>
+        </div>
+    </div>
+
+    <!-- BARRA LATERAL ESQUERDA -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="sidebar-brand-badge">GM</div>
+            <div class="sidebar-brand-text">
+                <h2>Guia Operacional</h2>
+                <span>Bulgarelli & GM Financial</span>
+            </div>
+        </div>
+
+        <nav class="nav-links">
+            <a onclick="showSegment('script')" class="nav-link active" id="btn-nav-script">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                Script Linear Guiado
+            </a>
+            <a onclick="showSegment('monitoria')" class="nav-link" id="btn-nav-monitoria">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                Monitoria & Qualidade
+            </a>
+            <a onclick="showSegment('procedimentos')" class="nav-link" id="btn-nav-procedimentos">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                Procedimentos
+            </a>
+            <a onclick="showSegment('termos_judiciais')" class="nav-link" id="btn-nav-termos_judiciais">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+                Termos Jurídicos
+            </a>
+            <a onclick="showSegment('dicas')" class="nav-link" id="btn-nav-dicas">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Dicas de Negociação
+            </a>
+            <a onclick="showSegment('tabulacoes')" class="nav-link" id="btn-nav-tabulacoes">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Tabulações
+            </a>
+            <a onclick="showSegment('institucional')" class="nav-link" id="btn-nav-institucional">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg>
+                Institucional
+            </a>
+        </nav>
+    </aside>
+
+    <!-- ÁREA PRINCIPAL -->
+    <div class="main-wrapper">
+        <header class="top-header">
+            <button class="toggle-btn" onclick="toggleSidebar()" title="Recuar / Expandir Barra Lateral">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ17wEXjiMVgZkPZ5VTlNzjJbT67cr6Axizaaa0bTcPrw&s=10" alt="Logo Bulgarelli" class="header-logo">
+            
+            <button class="btn-mural-trigger" onclick="openMural()">
+                📢 Mural & Destaques
+            </button>
+
+            <div class="search-box-wrapper">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="globalSearchInput" onkeyup="handleGlobalSearch()" placeholder="Pesquise em todo o guia: Antifraude, CAMEC, Ajuizamento, Desconto progressivo, Não acordo, 508, Quita+, Renajud, Falecido, MetLife...">
+            </div>
+        </header>
+
+        <main class="content-container">
+
+            <!-- PAINEL DE RESULTADOS DA BUSCA UNIFICADA (OMNIPRESENTE) -->
+            <div id="search-results-panel">
+                <div class="search-results-header">
+                    <h2>Resultados da Pesquisa: "<span id="search-term-display"></span>"</h2>
+                    <button onclick="clearSearch()" style="background:transparent; border:none; color:var(--primary); font-weight:700; cursor:pointer; font-size:0.88rem;">Limpar Busca ✕</button>
+                </div>
+                <div id="search-matches-list"></div>
+            </div>
+
+            <!-- 1. SEGMENTO: SCRIPT LINEAR GUIADO -->
+            <section id="seg-script" class="segment-view active">
+                <div class="segment-header">
+                    <h1>Roteiro de Atendimento Linear & Guiado</h1>
+                    <p>Conduza o contato etapa por etapa com os pequenos alertas de monitoria posicionados ao lado de cada trecho para garantir a conformidade.</p>
+                </div>
+
+                <!-- Indicador de Etapas Lineares -->
+                <div class="linear-step-indicator">
+                    <div class="step-node active" id="node-etapa-1" onclick="goToLinearStep(1)">
+                        <span class="node-num">1</span> Abertura & Identificação
+                    </div>
+                    <span>➔</span>
+                    <div class="step-node" id="node-etapa-2" onclick="goToLinearStep(2)">
+                        <span class="node-num">2</span> Apresentação do Débito
+                    </div>
+                    <span>➔</span>
+                    <div class="step-node" id="node-etapa-3" onclick="goToLinearStep(3)">
+                        <span class="node-num">3</span> Negociação & Quebra de Objeções
+                    </div>
+                    <span>➔</span>
+                    <div class="step-node" id="node-etapa-4" onclick="goToLinearStep(4)">
+                        <span class="node-num">4</span> Fechamento & Antifraude
+                    </div>
+                </div>
+
+                <!-- ESTÁGIO 1: ABERTURA & IDENTIFICAÇÃO -->
+                <div id="linear-stage-1" class="linear-stage-content">
+                    
+                    <!-- Bloco 1.1: Apresentação Titular PF / PJ -->
+                    <div class="card searchable-content" data-category="Script: Abertura">
+                        <span class="search-badge">Script • Estágio 1</span>
+                        <h3>1.1 Apresentação e Identificação Positiva (Ativo PF / PJ)</h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">Cumprimente cordialmente e realize a identificação obrigatória sem quebra de sigilo bancário:</p>
+                        
+                        <div class="script-grid-row">
+                            <!-- Coluna Esquerda: Fala do Roteiro -->
+                            <div class="speech-box">
+                                "Bom dia/Boa tarde, posso falar com o(a) Sr.(a) [NOME COMPLETO CLIENTE]? Meu nome é [SEU PRIMEIRO NOME] do escritório Bulgarelli Advogados em nome da GM Financial. Informo que o contato está sendo gravado, e para seguirmos com o atendimento com total segurança, poderia por gentileza informar os 06 (seis) primeiros números do seu CPF?"
+                                <div style="margin-top:12px; font-size:0.86rem; color:#475569; font-style:normal;">
+                                    <strong>Nota Operacional:</strong> Se o cliente questionar o que é a <em>GM Financial</em>, esclareça que esse é o novo nome de relacionamento que substitui <em>Chevrolet Serviços Financeiros</em>. Em PJ, solicitar 6 dígitos do CNPJ ou CPF do avalista.
+                                </div>
+                            </div>
+
+                            <!-- Coluna Direita: Pequeno Alerta de Monitoria ao Lado -->
+                            <div class="script-side-alert critical">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">⚠️ Alerta de Monitoria</span>
+                                    <span class="side-alert-badge crit">NCG - Zera</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li><span class="side-alert-highlight">Confirmação Positiva:</span> 6 primeiros dígitos do CPF/CNPJ + 1 pergunta de segurança (modelo, ano ou 2 últimos da placa). <strong>Sem isso ZERA (0 pts)!</strong></li>
+                                    <li>Falar seu 1º nome (-2 pts se omitir).</li>
+                                    <li>Citar Bulgarelli Advogados (-2 pts).</li>
+                                    <li>Separar Bulgarelli da GM Financial (-2 pts).</li>
+                                    <li>Confirmar nome completo do titular (-2 pts).</li>
+                                    <li>Avisar que o contato é gravado (-2 pts).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bloco 1.2: Confirmação dos Dados de Contato -->
+                    <div class="card searchable-content" data-category="Script: Atualização Cadastral">
+                        <span class="search-badge">Script • Estágio 1</span>
+                        <h3>1.2 Confirmação dos Dados de Contato (Atualização Cadastral)</h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">Confirme os dados cadastrais antes de prosseguir com a cobrança:</p>
+
+                        <div class="script-grid-row">
+                            <!-- Coluna Esquerda: Fala do Roteiro -->
+                            <div class="speech-box">
+                                "Para mantermos seu cadastro protegido e garantir o envio correto de segundas vias e comprovantes, vamos confirmar seus dados: seu e-mail cadastrado continua sendo [E-MAIL EM TELA]? Este telefone possui WhatsApp ativo para receber o código de barras e o boleto em PDF? Gostaria de adicionar outro número para recados?"
+                            </div>
+
+                            <!-- Coluna Direita: Pequeno Alerta de Monitoria ao Lado -->
+                            <div class="script-side-alert">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">📝 Alerta Cadastral</span>
+                                    <span class="side-alert-badge warn">-2 Pts</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li><span class="side-alert-highlight">NÃO SE ESQUEÇA DE ATUALIZAR:</span></li>
+                                    <li><strong>1. Endereço Completo</strong></li>
+                                    <li><strong>2. Telefone (validar WhatsApp)</strong></li>
+                                    <li><strong>3. E-mail ativo</strong></li>
+                                    <li>Obrigatório em 100% dos contatos (sucesso ou insucesso). Falhar desconta <strong>2 pontos</strong>.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Próximos Caminhos do Estágio 1 -->
+                        <div class="next-path-box">
+                            <div class="next-path-title">
+                                ➔ O que o interlocutor respondeu? (Selecione o Próximo Caminho):
+                            </div>
+                            <div class="path-choices-grid">
+                                <div class="path-choice-btn" onclick="goToLinearStep(2)">
+                                    <div class="choice-header">
+                                        <span>Confirmou Dados com Sucesso</span>
+                                        <span>➔</span>
+                                    </div>
+                                    <span class="choice-desc">Avançar para a apresentação dos valores e parcelas em aberto.</span>
+                                </div>
+                                <div class="path-choice-btn" onclick="showBranchScript('terceiro_responsavel')">
+                                    <div class="choice-header">
+                                        <span>Terceiro Responsável pelo Pagamento</span>
+                                        <span>➔</span>
+                                    </div>
+                                    <span class="choice-desc">Quem atendeu afirma que responde financeiramente pelo veículo.</span>
+                                </div>
+                                <div class="path-choice-btn" onclick="showBranchScript('terceiro_recado')">
+                                    <div class="choice-header">
+                                        <span>Terceiro Não Responsável (Recado)</span>
+                                        <span>➔</span>
+                                    </div>
+                                    <span class="choice-desc">Telefone confirmado do cliente (deixar recado sem expor a dívida).</span>
+                                </div>
+                                <div class="path-choice-btn" onclick="showBranchScript('terceiro_desconhece')">
+                                    <div class="choice-header">
+                                        <span>Terceiro Desconhece o Cliente</span>
+                                        <span>➔</span>
+                                    </div>
+                                    <span class="choice-desc">Telefone incorreto / não pertence ao titular.</span>
+                                </div>
+                                <div class="path-choice-btn" onclick="showBranchScript('falecido')">
+                                    <div class="choice-header">
+                                        <span>Informa Falecimento do Cliente</span>
+                                        <span>➔</span>
+                                    </div>
+                                    <span class="choice-desc">Procedimentos de certidão de óbito e seguro MetLife.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="branch-script-box-1" style="display:none; margin-top:16px;"></div>
+                    </div>
+                </div>
+
+                <!-- ESTÁGIO 2: APRESENTAÇÃO DO DÉBITO -->
+                <div id="linear-stage-2" class="linear-stage-content" style="display:none;">
+                    
+                    <div class="card searchable-content" data-category="Script: Apresentação do Débito">
+                        <span class="search-badge">Script • Estágio 2</span>
+                        <h3>2.1 Apresentação das Parcelas e Valores Atualizados</h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">Informe a pendência de forma clara e consulte o status:</p>
+
+                        <div class="script-grid-row">
+                            <!-- Coluna Esquerda: Fala do Roteiro -->
+                            <div class="speech-box">
+                                "Sr.(a) [NOME CLIENTE], entramos em contato referente ao financiamento do seu veículo [MODELO VEÍCULO]. Identificamos atraso de [XX] dias na(s) parcela(s) número [NÚMERO DAS PARCELAS], com vencimento original desde [DIA/MÊS], e valor atualizado com encargos de R$ [VALOR TOTAL ATUALIZADO COM JUROS E MULTAS]. O(a) senhor(a) confirma se esta(s) parcela(s) já foi(foram) paga(s)?"
+                            </div>
+
+                            <!-- Coluna Direita: Pequeno Alerta de Monitoria ao Lado -->
+                            <div class="script-side-alert">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">📊 Alerta de Débito</span>
+                                    <span class="side-alert-badge warn">-7 Pts Total</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li><span class="side-alert-highlight">Verbalização Obrigatória:</span></li>
+                                    <li>Verbalizar números das parcelas em aberto (-2 pts se omitir).</li>
+                                    <li>Informar dia e mês da mais antiga + dias de atraso (-2 pts).</li>
+                                    <li>Verbalizar valor atualizado com juros e multas (-3 pts).</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Próximos Caminhos do Estágio 2 -->
+                        <div class="next-path-box">
+                            <div class="next-path-title">
+                                ➔ Qual a situação da parcela informada pelo cliente?
+                            </div>
+                            <div class="path-choices-grid">
+                                <div class="path-choice-btn" onclick="showBranchScript('alega_pago')">
+                                    <div class="choice-header">
+                                        <span>Cliente afirma que JÁ PAGOU</span>
+                                        <span>➔</span>
+                                    </div>
+                                    <span class="choice-desc">Verificar prazo: menos de 2 dias ou envio de comprovante.</span>
+                                </div>
+                                <div class="path-choice-btn" onclick="showBranchScript('quer_pagar_imediato')">
+                                    <div class="choice-header">
+                                        <span>Quer pagar hoje de imediato</span>
+                                        <span>➔</span>
+                                    </div>
+                                    <span class="choice-desc">Sem necessidade de argumentação (com ou sem boleto).</span>
+                                </div>
+                                <div class="path-choice-btn" onclick="showBranchScript('promessa_futura')">
+                                    <div class="choice-header">
+                                        <span>Informa pagamento em data futura</span>
+                                        <span>➔</span>
+                                    </div>
+                                    <span class="choice-desc">Frequência histórica ou prazo D+2.</span>
+                                </div>
+                                <div class="path-choice-btn" onclick="goToLinearStep(3)">
+                                    <div class="choice-header">
+                                        <span>Não pode pagar / Sem previsão</span>
+                                        <span>➔</span>
+                                    </div>
+                                    <span class="choice-desc">Entrar na esteira de sondagem, quebra de objeções e alternativas.</span>
+                                </div>
+                                <div class="path-choice-btn" onclick="showBranchScript('mes_invertido')">
+                                    <div class="choice-header">
+                                        <span>Pagou parcela de mês invertido</span>
+                                        <span>➔</span>
+                                    </div>
+                                    <span class="choice-desc">Pagamento adiantado com parcela anterior pendente.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="branch-script-box-2" style="display:none; margin-top:16px;"></div>
+                    </div>
+                </div>
+
+                <!-- ESTÁGIO 3: NEGOCIAÇÃO & QUEBRA DE OBJEÇÕES -->
+                <div id="linear-stage-3" class="linear-stage-content" style="display:none;">
+                    
+                    <!-- Bloco 3.1: Sondagem da Inadimplência -->
+                    <div class="card searchable-content" data-category="Script: Sondagem e Desconto">
+                        <span class="search-badge">Script • Estágio 3</span>
+                        <h3>3.1 Sondagem Assertiva e Regra do Desconto Progressivo</h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">Investigue a causa do atraso e use a flexibilidade com inteligência:</p>
+
+                        <div class="script-grid-row">
+                            <!-- Coluna Esquerda: Fala do Roteiro -->
+                            <div class="speech-box">
+                                "Compreendo sua situação, Sr.(a) [NOME CLIENTE]. Para que possamos encontrar uma condição especial que caiba no seu momento financeiro e mantenha seu contrato protegido, o que aconteceu que motivou esse atraso e qual o valor que o(a) senhor(a) possui disponível hoje para regularizarmos?"
+                            </div>
+
+                            <!-- Coluna Direita: Pequeno Alerta de Monitoria ao Lado -->
+                            <div class="script-side-alert critical">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">🎯 Alerta de Negociação</span>
+                                    <span class="side-alert-badge crit">-28 Pts Total</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li><span class="side-alert-highlight">Sondar Inadimplência:</span> Faça perguntas assertivas investigando a causa real. Omitir custa <strong>16 pontos</strong>!</li>
+                                    <li><span class="side-alert-highlight">Desconto Progressivo:</span> Nunca dê o desconto máximo de primeira sem contrapartida de data do cliente. Falhar custa <strong>12 pontos</strong>!</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bloco 3.2: Catálogo Detalhado de Objeções (DIVIDIDO EM 2 GRUPOS) -->
+                    <div class="card searchable-content" data-category="Script: Argumentações e Objeções">
+                        <span class="search-badge">Script • Estágio 3</span>
+                        <h3>3.2 Catálogo Detalhado de Objeções (Clique para abrir a fala e procedimento)</h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:8px;">Selecione o cenário que o cliente apresentou, dividido por grupo de atendimento:</p>
+
+                        <!-- GRUPO A: PROPOSTAS DE NEGOCIAÇÃO -->
+                        <div class="group-header-tag">💼 Grupo 1: Propostas de Negociação</div>
+                        <div class="path-choices-grid">
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_quita_mais')">
+                                <div class="choice-header"><span>1. Acordo via Plataforma Quita+</span><span>➔</span></div>
+                                <span class="choice-desc">Parcelamento em até 21x no cartão de crédito.</span>
+                            </div>
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_devolucao')">
+                                <div class="choice-header"><span>2. Proposta de Devolução Amigável</span><span>➔</span></div>
+                                <span class="choice-desc">Com anistia vs sem anistia e saldo remanescente.</span>
+                            </div>
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_extensao')">
+                                <div class="choice-header"><span>3. Extensão / Prorrogação</span><span>➔</span></div>
+                                <span class="choice-desc">Taxa diluída e assinatura de termo em até 3 dias no WhatsApp.</span>
+                            </div>
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_renegociacao')">
+                                <div class="choice-header"><span>4. Renegociação de Contrato</span><span>➔</span></div>
+                                <span class="choice-desc">Análise em 2 dias úteis, boleto de IOF e parcela GAP.</span>
+                            </div>
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_pagamento_parcial')">
+                                <div class="choice-header"><span>5. Pagamento Parcial Não Elegível</span><span>➔</span></div>
+                                <span class="choice-desc">Cláusula G das Condições Gerais e legislação.</span>
+                            </div>
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_realocacao')">
+                                <div class="choice-header"><span>6. Realocação de Pagamento</span><span>➔</span></div>
+                                <span class="choice-desc">Parcela paga incorretamente dentro do mês.</span>
+                            </div>
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_alterar_vencimento')">
+                                <div class="choice-header"><span>7. Alterar Data de Vencimento</span><span>➔</span></div>
+                                <span class="choice-desc">Taxa de deslocamento e limite de 2 vezes no contrato.</span>
+                            </div>
+                        </div>
+
+                        <!-- GRUPO B: RECLAMAÇÕES DO CLIENTE -->
+                        <div class="group-header-tag" style="margin-top:22px;">🗣️ Grupo 2: Reclamações do Cliente</div>
+                        <div class="path-choices-grid">
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_juros')">
+                                <div class="choice-header"><span>1. Questionamento de Juros, Multa e Honorários</span><span>➔</span></div>
+                                <span class="choice-desc">Explicação de 0,433% ao dia, CDC e BACEN.</span>
+                            </div>
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_excesso_ligacoes')">
+                                <div class="choice-header"><span>2. Reclamação de Excesso de Ligações</span><span>➔</span></div>
+                                <span class="choice-desc">Justificativa legal e cessamento no dia com dados confirmados.</span>
+                            </div>
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_desemprego')">
+                                <div class="choice-header"><span>3. Alegação de Desemprego (MetLife)</span><span>➔</span></div>
+                                <span class="choice-desc">Acionamento do Seguro Prestamista (3004-9329).</span>
+                            </div>
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_carro_terceiro')">
+                                <div class="choice-header"><span>4. Veículo em Posse de Terceiro</span><span>➔</span></div>
+                                <span class="choice-desc">Descumprimento contratual; titular continua responsável.</span>
+                            </div>
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_consultoria')">
+                                <div class="choice-header"><span>5. Contratou Consultoria Externa</span><span>➔</span></div>
+                                <span class="choice-desc">GM não autoriza terceiros; cobrança segue ativa.</span>
+                            </div>
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_desconhece_divida')">
+                                <div class="choice-header"><span>6. Desconhece a Dívida (Fraude)</span><span>➔</span></div>
+                                <span class="choice-desc">Boletim de Ocorrência enviado para documentos.cac.</span>
+                            </div>
+                            <div class="path-choice-btn" onclick="showBranchScript('obj_acao_contraria')">
+                                <div class="choice-header"><span>7. Alega Ação Contrária / Judicial</span><span>➔</span></div>
+                                <span class="choice-desc">Coleta de processo, comarca, vara e oferta amigável.</span>
+                            </div>
+                        </div>
+
+                        <!-- Espaço onde a fala da objeção clicada é aberta dinamicamente -->
+                        <div id="branch-script-box-3" style="display:none; margin-top:16px;"></div>
+
+                        <!-- Botão de avanço para fechamento -->
+                        <div style="margin-top:22px; display:flex; justify-content:space-between; align-items:center;">
+                            <button onclick="goToLinearStep(2)" style="background:#f1f5f9; border:1px solid #cbd5e1; padding:10px 16px; border-radius:8px; font-weight:700; cursor:pointer;">
+                                ⬅ Voltar para Apresentação do Débito
+                            </button>
+                            <button onclick="goToLinearStep(4)" style="padding:12px 24px; background:var(--primary); color:#fff; border:none; border-radius:10px; font-weight:700; cursor:pointer; box-shadow:0 4px 12px rgba(0,92,230,0.25);">
+                                Acordo Firmado ➔ Avançar para Fechamento & Antifraude (Passo 4)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bloco 3.3: Segmentação em Caso de Não Acordo (NOVO BLOCO) -->
+                    <div class="card searchable-content" data-category="Script: Não Acordo" style="border: 1.5px solid var(--danger-border); background: #fffcfc;">
+                        <span class="search-badge" style="background:#fee2e2; color:#dc2626;">Procedimento Crítico • Não Acordo</span>
+                        <h3 style="color:#b91c1c;">3.3 Conduta e Sanções em Caso de Não Acordo</h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">Se o cliente recusar todas as propostas, é <strong>obrigatório</strong> comunicar as sanções contratuais e registrar no sistema:</p>
+
+                        <div class="script-grid-row">
+                            <!-- Fala de Não Acordo -->
+                            <div class="speech-box" style="border-left-color: var(--danger); background: #fff5f5; color: #7f1d1d;">
+                                "Compreendo perfeitamente sua decisão no momento, Sr.(a) [NOME CLIENTE]. No entanto, como dever contratual, preciso alertá-lo(a) que a manutenção da pendência acarretará as seguintes sanções:<br><br>
+                                1. Manutenção do registro do seu CPF junto aos <strong>órgãos de proteção ao crédito (Serasa/SPC)</strong>;<br>
+                                2. Incidência diária de <strong>juros moratórios de 0,433% ao dia</strong> somados à multa contratual de 2%;<br>
+                                3. Continuidade das tentativas diárias de contato de cobrança;<br>
+                                4. Perda irreversível da campanha atual de descontos sobre os juros;<br>
+                                5. Inclusão de honorários advocatícios a partir de 16 dias de atraso;<br>
+                                6. <strong>Medidas Judiciais:</strong> Para contratos a partir de 31 dias de atraso (carteira FPD) e a partir de 120 dias (Regular e PJ), poderá ocorrer o acionamento judicial com <strong>busca e apreensão do veículo</strong>. Havendo a retomada, o banco não realiza campanhas de desconto e o bem será leiloado, permanecendo o senhor responsável pelo saldo remanescente caso o leilão não liquide a dívida integral.<br><br>
+                                Caso decida regularizar para estancar estas medidas, nossos canais oficiais são o WhatsApp (11) 3185-8052 e o 0800 056 2410, de segunda a sexta das 08h às 20h e sábados das 08h às 14h. Alguma dúvida adicional? Agradeço a atenção e tenha um bom dia."
+                            </div>
+
+                            <!-- Alerta de Monitoria Lateral para Não Acordo -->
+                            <div class="script-side-alert critical">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">⛔ Sanções por Não Acordo</span>
+                                    <span class="side-alert-badge crit">-11 Pts</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li><span class="side-alert-highlight">OBRIGATÓRIO NO INSUCESSO:</span> Comunicar sanções mesmo quando o cliente NÃO fechar acordo (-11 pts se omitir).</li>
+                                    <li>Repassar canais e horários de atendimento (-2 pts se omitir).</li>
+                                    <li>Tabulação correta: <strong>SEM PREVISÃO DE PAGAMENTO</strong>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ESTÁGIO 4: FECHAMENTO & ANTIFRAUDE -->
+                <div id="linear-stage-4" class="linear-stage-content" style="display:none;">
+                    
+                    <div class="card searchable-content" data-category="Script: Fechamento">
+                        <span class="search-badge">Script • Estágio 4</span>
+                        <h3>4.1 Fechamento da Negociação e Dados do Acordo</h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">Confirme com precisão os valores, vencimento e canal acordado:</p>
+
+                        <div class="script-grid-row">
+                            <!-- Coluna Esquerda: Fala do Roteiro -->
+                            <div class="speech-box">
+                                "Excelente, Sr.(a) [NOME CLIENTE]! Confirmando os dados do nosso acordo: parcela(s) número [XX], no valor final acordado de R$ [VALOR], com vencimento para o dia [DD/MM]. O boleto será disponibilizado através do seu [WhatsApp / E-mail cadastrado]."
+                            </div>
+
+                            <!-- Coluna Direita: Pequeno Alerta de Monitoria ao Lado -->
+                            <div class="script-side-alert">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">📑 Dados do Acordo</span>
+                                    <span class="side-alert-badge warn">-5 Pts</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li><span class="side-alert-highlight">Confirmar Obrigatoriamente:</span></li>
+                                    <li>Valor acordado em reais.</li>
+                                    <li>Vencimento (Dia e Mês).</li>
+                                    <li>Canal de disponibilização (WhatsApp ou E-mail). Omitir custa <strong>5 pontos</strong>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card searchable-content" data-category="Script: Antifraude">
+                        <span class="search-badge">Script • Estágio 4</span>
+                        <h3>4.2 Instruções Antifraude Obrigatórias (Sucesso e Insucesso)</h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">Passe todas as medidas de segurança contra golpes:</p>
+
+                        <div class="script-grid-row">
+                            <!-- Coluna Esquerda: Fala do Roteiro -->
+                            <div class="speech-box">
+                                "Para a sua segurança financeira, anote com atenção as orientações de conferência do seu boleto:<br>
+                                1. <strong>Senha do PDF:</strong> É o número completo do seu CPF ou CNPJ (sem pontos ou traços).<br>
+                                2. <strong>Beneficiário Oficial:</strong> Deve constar exclusivamente <strong>BANCO GM S/A</strong>. Nunca realize pagamentos com beneficiário em nome de pessoa física.<br>
+                                3. <strong>Banco Emissor:</strong> É sempre o <strong>Banco ITAÚ</strong>.<br>
+                                4. <strong>Linha Digitável:</strong> O código de barras sempre <strong>inicia com 34191</strong> e termina exatamente com os números do valor do boleto.<br>
+                                5. <strong>Sem Pix ou TED:</strong> A GM Financial <strong>NÃO recebe pagamentos via Pix ou TED</strong>, nem por plataformas como Mercado Pago ou PagSeguro.<br>
+                                6. <strong>Ativação:</strong> Aguarde 90 minutos após o recebimento para realizar o pagamento devido ao registro bancário.<br>
+                                7. <strong>Compensação:</strong> A baixa no sistema ocorre em até 02 dias úteis e a baixa nos órgãos de proteção em até 5 dias úteis."
+                            </div>
+
+                            <!-- Coluna Direita: Pequeno Alerta de Monitoria ao Lado -->
+                            <div class="script-side-alert critical">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">🛡️ Alerta Antifraude</span>
+                                    <span class="side-alert-badge crit">-11 Pts</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li><span class="side-alert-highlight">NÃO ESQUEÇA DE INFORMAR:</span></li>
+                                    <li>Senha = CPF/CNPJ completo.</li>
+                                    <li>Beneficiário = Banco GM S/A.</li>
+                                    <li>Emissor = Banco Itaú.</li>
+                                    <li>Início = <strong>34191</strong> / Final = Valor.</li>
+                                    <li><strong>NÃO aceitamos Pix ou TED!</strong></li>
+                                    <li>Omitir penaliza em <strong>11 pontos</strong>!</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card searchable-content" data-category="Script: Sanções e Encerramento">
+                        <span class="search-badge">Script • Estágio 4</span>
+                        <h3>4.3 Sanções pelo Não Pagamento e Canais Oficiais</h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">Alerte sobre as consequências contratuais e forneça os contatos de retorno:</p>
+
+                        <div class="script-grid-row">
+                            <!-- Coluna Esquerda: Fala do Roteiro -->
+                            <div class="speech-box">
+                                "Ressaltamos que a quebra deste acordo ou a falta de pagamento na data acarretará na perda da campanha de descontos, incidência de juros diários (0,433% ao dia) e multa de 2%, continuidade dos contatos de cobrança e o prosseguimento das medidas judiciais cabíveis, como o ajuizamento da ação e a busca e apreensão do veículo.<br><br>
+                                Caso precise nos contatar para confirmar o recebimento ou tirar dúvidas, nossos canais oficiais são o WhatsApp <strong>(11) 3185-8052</strong> e o telefone <strong>0800 056 2410</strong>, com atendimento de segunda a sexta das 08h às 20h e aos sábados das 08h às 14h. Alguma dúvida adicional? Agradeço sua atenção e tenha um ótimo dia!"
+                            </div>
+
+                            <!-- Coluna Direita: Pequeno Alerta de Monitoria ao Lado -->
+                            <div class="script-side-alert">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">📞 Sanções e Canais</span>
+                                    <span class="side-alert-badge warn">-13 Pts Total</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li><span class="side-alert-highlight">Sanções por Atraso:</span> Alertar sobre juros, negativação e ajuizamento/busca e apreensão (-11 pts se omitir).</li>
+                                    <li><span class="side-alert-highlight">Canais & Horários:</span> Informar 0800, WhatsApp e os horários (08h às 20h / sáb 08h às 14h). Omitir custa -2 pts.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Conclusão e Tabulação -->
+                        <div class="next-path-box">
+                            <div class="next-path-title">
+                                🏁 Finalizar Ligação e Registrar Tabulação Correta:
+                            </div>
+                            <div class="path-choices-grid">
+                                <div class="path-choice-btn" onclick="alert('Tabulação: PROMESSA DE PAGAMENTO. Certifique-se de preencher a data acordada e canal de envio no sistema.')">
+                                    <div class="choice-header"><span>Tabular: PROMESSA DE PAGAMENTO</span></div>
+                                    <span class="choice-desc">Acordo firmado com vencimento e valor estabelecidos.</span>
+                                </div>
+                                <div class="path-choice-btn" onclick="alert('Tabulação: SEM PREVISÃO DE PAGAMENTO. Registre as alternativas ofertadas e as sanções comunicadas.')">
+                                    <div class="choice-header"><span>Tabular: SEM PREVISÃO DE PAGAMENTO</span></div>
+                                    <span class="choice-desc">Em caso de recusa final após todas as tentativas.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:16px;">
+                            <button onclick="goToLinearStep(1)" style="background:#f1f5f9; border:1px solid #cbd5e1; padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer;">
+                                ↺ Reiniciar Roteiro para Novo Atendimento
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- 2. SEGMENTO: REGRAS DE MONITORIA & PESOS -->
+            <section id="seg-monitoria" class="segment-view">
+                <div class="segment-header">
+                    <h1>Regras de Monitoria & Pesos</h1>
+                    <p>Matriz oficial de pontuação e critérios de avaliação de qualidade (Cobrança Administrativa - Voz e WhatsApp).</p>
+                </div>
+
+                <div class="card searchable-content" data-category="Monitoria: Abertura">
+                    <span class="search-badge">Monitoria</span>
+                    <h3>Bloco 1: Abertura da Ligação</h3>
+                    <table class="monitoria-table">
+                        <thead>
+                            <tr><th style="width:90px;">Peso</th><th style="width:260px;">Item Avaliado</th><th>Considerar não conforme quando:</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><span class="peso-pill peso-low">Peso 2</span></td><td><strong>Nome do operador</strong></td><td>Quando não informar o nome do operador (Apenas primeiro nome).</td></tr>
+                            <tr><td><span class="peso-pill peso-low">Peso 2</span></td><td><strong>Nome do escritório</strong></td><td>Quando não informar o nome do escritório (Bulgarelli Advogados).</td></tr>
+                            <tr><td><span class="peso-pill peso-low">Peso 2</span></td><td><strong>Informar credor GM Financial</strong></td><td>Quando não informar o nome do credor ou quando não for feita a separação entre escritório e credor. Ex: Meu nome é... Da Bulgarelli X GM Financial.</td></tr>
+                            <tr><td><span class="peso-pill peso-low">Peso 2</span></td><td><strong>Nome completo do responsável / cliente</strong></td><td>Quando em contato, não confirmar o nome completo do cliente / empresa ou nome do responsável pelo pagamento.</td></tr>
+                            <tr><td><span class="peso-pill peso-low">Peso 2</span></td><td><strong>Contato gravado/monitorado</strong></td><td>Quando não informar ao cliente ou terceiro responsável pelo pagamento que o contato está sendo gravado / monitorado.</td></tr>
+                            <tr><td><span class="peso-pill peso-low">Peso 2</span></td><td><strong>Confirmar dados de contato</strong></td><td>Quando não realizar a confirmação por completo das informações de cadastro, telefone e e-mail.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card searchable-content" data-category="Monitoria: Negociação">
+                    <span class="search-badge">Monitoria</span>
+                    <h3>Bloco 2: Negociação e Condução</h3>
+                    <table class="monitoria-table">
+                        <thead>
+                            <tr><th style="width:90px;">Peso</th><th style="width:260px;">Item Avaliado</th><th>Considerar não conforme quando:</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><span class="peso-pill peso-low">Peso 2</span></td><td><strong>Parcelas em atraso</strong></td><td>Quando não verbalizar o (s) número (s) da (s) parcela (s) em aberto.</td></tr>
+                            <tr><td><span class="peso-pill peso-low">Peso 2</span></td><td><strong>Dia do vencimento e dias em atraso</strong></td><td>Não informar o dia e mês de vencimento da parcela mais antiga e total de dias em atraso.</td></tr>
+                            <tr><td><span class="peso-pill peso-low">Peso 3</span></td><td><strong>Valor atualizado</strong></td><td>Não informar o valor da dívida atualizada com juros e multas.</td></tr>
+                            <tr><td><span class="peso-pill peso-high">Peso 16</span></td><td><strong>Sondar o motivo de inadimplência</strong></td><td>Não realizar a sondagem adequada, usando perguntas assertivas e investigação dos motivos de inadimplência.</td></tr>
+                            <tr><td><span class="peso-pill peso-high">Peso 16</span></td><td><strong>Explorar opções de negociação</strong></td><td>Não considerar histórico caso haja, para parafrasear a oferta de negociações anteriores. E ou não ofertar as alternativas de negociação existentes para o contrato (ex. pagamento através de cartão de crédito, devolução amigável).</td></tr>
+                            <tr><td><span class="peso-pill peso-mid">Peso 12</span></td><td><strong>Oferta de desconto progressivo</strong></td><td>Quando o desconto for concedido imediatamente sem contrapartida por parte do cliente. E/ou quando existe a possibilidade de oferecer o desconto e ele não é disponibilizado (Deve-se apresentar valor com desconto).</td></tr>
+                            <tr><td><span class="peso-pill peso-low">Peso 4</span></td><td><strong>Comunicação e linguagem</strong></td><td>Quando a linguagem não é clara, contém termos técnicos difíceis, gírias, gerundismo, informalidade que prejudicam o entendimento do cliente ou terceiro e fala robotizada.</td></tr>
+                            <tr><td><span class="peso-pill peso-low">Peso 2</span></td><td><strong>Tom de voz e ritmo</strong></td><td>Quando se percebe que o tom de voz não é amigável e respeitoso, manifestando grosseria, impaciência, rapidez excessiva e um estilo mecanizado.</td></tr>
+                            <tr><td><span class="peso-pill peso-low">Peso 2</span></td><td><strong>Empatia e escuta ativa</strong></td><td>Quando identificada situações no qual o cliente ou terceiro é ignorado, falta de compreensão pela situação, interrupções constantes ou minimizar as informações passadas.</td></tr>
+                            <tr><td><span class="peso-pill peso-low">Peso 2</span></td><td><strong>Gerenciar tempo de resposta</strong></td><td>Quando identificado que o atendimento não foi ágil ou com pausas excessivas sem retorno dentro do limite estabelecido (regra dos 30 segundos / limite de 5 minutos).</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card searchable-content" data-category="Monitoria: Encerramento">
+                    <span class="search-badge">Monitoria</span>
+                    <h3>Bloco 3: Encerramento e Antifraude</h3>
+                    <table class="monitoria-table">
+                        <thead>
+                            <tr><th style="width:90px;">Peso</th><th style="width:260px;">Item Avaliado</th><th>Considerar não conforme quando:</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><span class="peso-pill peso-mid">Peso 11</span></td><td><strong>Orientações Antifraude</strong></td><td>Quando não informar as orientações antifraude (Sucesso e Insucesso).</td></tr>
+                            <tr><td><span class="peso-pill peso-mid">Peso 11</span></td><td><strong>Sanções pelo não pagamento</strong></td><td>Quando não comunicar ao cliente ou terceiro as consequências decorrentes do atraso, em conformidade com o script vigente (Sucesso e Insucesso).</td></tr>
+                            <tr><td><span class="peso-pill peso-low">Peso 5</span></td><td><strong>Dados da negociação</strong></td><td>Quando não informar o valor acordado, vencimento (Dia/mês) e canal pelo qual será disponibilizado boleto. Aplicável quando há fechamento de acordo.</td></tr>
+                            <tr><td><span class="peso-pill peso-low">Peso 2</span></td><td><strong>Informar canais de atendimento</strong></td><td>Quando não informar os canais, dias e horários de atendimento para retorno com o escritório - 0800 e WhatsApp.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card searchable-content" data-category="Monitoria: NCG" style="border: 1.5px solid var(--danger-border);">
+                    <span class="search-badge" style="background:#fee2e2; color:#dc2626;">NCG - Falha Crítica</span>
+                    <h3 style="color:#b91c1c;">Bloco 4: Não Conformidade Grave (Zera a Avaliação - 0 pts)</h3>
+                    <table class="monitoria-table">
+                        <thead>
+                            <tr><th style="width:90px;">Peso</th><th style="width:260px;">Item Crítico</th><th>Critério de Aplicação</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><span class="peso-pill peso-ncg">NCG (0)</span></td><td><strong>Não realizar confirmação positiva</strong></td><td>Não realizar a confirmação do CPF/CNPJ (6 dígitos) e uma das perguntas de segurança vigente (modelo, ano ou dois últimos dígitos da placa do veículo).</td></tr>
+                            <tr><td><span class="peso-pill peso-ncg">NCG (0)</span></td><td><strong>Ofensas ao cliente</strong></td><td>Realizar atitudes de desrespeito com cliente ou terceiro responsável pelo pagamento, incluindo xingamentos, difamação, constrangimento ou ser invasivo ao ponto de incomodar.</td></tr>
+                            <tr><td><span class="peso-pill peso-ncg">NCG (0)</span></td><td><strong>Tabulação incorreta</strong></td><td>Quando a tabulação registrada no sistema não estiver de acordo com o atendimento real realizado na linha.</td></tr>
+                            <tr><td><span class="peso-pill peso-ncg">NCG (0)</span></td><td><strong>Garantias e promessas indevidas</strong></td><td>Fornecer garantias de serviços, benefícios, promessas de descontos ou campanhas sem o conhecimento prévio da GM Financial, ocasionando ônus ao banco.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 3. SEGMENTO: PROCEDIMENTOS OPERACIONAIS DETALHADOS -->
+            <section id="seg-procedimentos" class="segment-view">
+                <div class="segment-header">
+                    <h1>Procedimentos Operacionais Detalhados</h1>
+                    <p>Políticas e regras financeiras da GM Financial e da Bulgarelli Advogados.</p>
+                </div>
+
+                <div class="card searchable-content" data-category="Procedimentos: Antifraude">
+                    <span class="search-badge">Procedimentos</span>
+                    <h3>Diretrizes Antifraude Oficiais de Pagamento</h3>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:10px;">O cliente deve ser orientado a conferir rigorosamente os itens de segurança em qualquer boleto:</p>
+                    <ul>
+                        <li><strong>Senha para Abertura:</strong> O arquivo PDF é protegido por senha, que corresponde ao número completo do CPF ou CNPJ do titular (sem pontos, barras ou traços).</li>
+                        <li><strong>Beneficiário Obrigatório:</strong> O beneficiário deve ser impreterivelmente <strong>BANCO GM S/A</strong>. Nunca realize pagamentos onde conste nome de pessoa física ou outra empresa.</li>
+                        <li><strong>Banco Emissor:</strong> O banco emissor oficial é o <strong>Banco ITAÚ</strong>.</li>
+                        <li><strong>Linha Digitável:</strong> O código de barras sempre inicia com o código bancário <strong>34191</strong> e finaliza exatamente com a numeração correspondente ao valor em reais do boleto.</li>
+                        <li><strong>Sem Pix ou TED:</strong> A GM Financial <strong>não solicita Pix, TED ou transferências</strong>, nem utiliza carteiras como PagSeguro ou Mercado Pago para cobrança de financiamentos.</li>
+                        <li><strong>Validação de Canais:</strong> Boletos enviados pelo WhatsApp oficial contam com selo de verificação da instituição. Na dúvida, o cliente deve contatar o 0800 056 2410.</li>
+                    </ul>
+                </div>
+
+                <div class="card searchable-content" data-category="Procedimentos: Antecipação de Mês">
+                    <span class="search-badge">Procedimentos</span>
+                    <h3>Antecipação do Mês e Pagamento Invertido</h3>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:10px;">Regra de atuação quando o cliente antecipa uma parcela futura por equívoco:</p>
+                    <ul>
+                        <li><strong>Cenário 1 - Pagamento e contato no mês anterior:</strong> Exemplo: o cliente estava no mês 08, pagou a fatura do mês 10 por engano e, ainda dentro do mês 08, percebeu o erro e acionou o escritório. <strong>Ação:</strong> Direcionamos o caso para o Banco GM, e no prazo de até 7 dias úteis ele recebe o estorno do valor na conta.</li>
+                        <li><strong>Cenário 2 - Pagamento percebido no mês atual:</strong> Exemplo: o cliente pagou a fatura 10 no mês 08, mas só percebeu o erro no mês 09 ao ser cobrado. <strong>Ação:</strong> Informamos que a parcela do mês 08 continuou pendente e deve ser paga normalmente. No mês 10 não virá cobrança, pois já se encontra quitada antecipadamente.</li>
+                    </ul>
+                </div>
+
+                <div class="card searchable-content" data-category="Procedimentos: Prazos e Baixas">
+                    <span class="search-badge">Procedimentos</span>
+                    <h3>Prazos Operacionais e Baixa de Restrições</h3>
+                    <ul>
+                        <li><strong>Compensação do Boleto:</strong> O prazo de compensação e baixa no sistema é de até <strong>02 dias úteis</strong>.</li>
+                        <li><strong>Exclusão dos Órgãos de Proteção (Serasa/SPC):</strong> A baixa da negativação ocorre no prazo legal de <strong>5 a 7 dias úteis</strong> após a identificação do pagamento pelo credor.</li>
+                        <li><strong>Baixa de Gravame:</strong> Após o pagamento da última parcela e quitação integral do financiamento, a baixa do gravame no Detran ocorre em até <strong>10 dias corridos</strong>.</li>
+                        <li><strong>Pagamento em Casa Lotérica:</strong> O operador deve alertar o cliente para checar com a agência lotérica o limite máximo de recebimento em espécie permitido para a unidade.</li>
+                    </ul>
+                </div>
+
+                <div class="card searchable-content" data-category="Procedimentos: Terceiros e Receptivo">
+                    <span class="search-badge">Procedimentos</span>
+                    <h3>Regras para Contato com Terceiros, Receptivo e Preventivo</h3>
+                    <ul>
+                        <li><strong>Terceiro Não Responsável (Recado):</strong> O recado só pode ser deixado em telefones confirmados do titular. Nunca informe dados de parcelas, valores ou ajuizamento a terceiros que não respondem financeiramente. Solicite que anotem o 0800 056 2410 e tabule como <em>RECADO COM TERCEIROS</em>.</li>
+                        <li><strong>Atendimento Receptivo:</strong> No receptivo, realize imediatamente a apresentação (Bulgarelli e GM), aviso de gravação e confirme os 6 dígitos do CPF + 1 pergunta de segurança antes de abrir qualquer dado da tela.</li>
+                        <li><strong>Contato Preventivo:</strong> Contato focado na confirmação de recebimento do boleto da promessa e alinhamento do pagamento. Se o cliente não recebeu, reenvie por WhatsApp/e-mail; se não for pagar, reinicie a negociação.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 4. SEGMENTO: TERMOS JURÍDICOS (CADA UM EM SEU PRÓPRIO CAMPO SEPARADO) -->
+            <section id="seg-termos_judiciais" class="segment-view">
+                <div class="segment-header">
+                    <h1>Termos Jurídicos na Cobrança</h1>
+                    <p>Conceitos jurídicos essenciais explicados individualmente para qualificar sua argumentação.</p>
+                </div>
+
+                <!-- Termo 1: CAMEC -->
+                <div class="card searchable-content" data-category="Jurídico: CAMEC">
+                    <span class="search-badge">Termo Jurídico • Pré-Ajuizamento</span>
+                    <h3>1. CAMEC (Câmara de Conciliação)</h3>
+                    <p style="font-size:0.92rem; color:#334155; line-height:1.7;">
+                        A <strong>CAMEC</strong> é um órgão privado de mediação e conciliação que atua na fase pré-ajuizamento. Representa a <strong>última oportunidade de acordo extrajudicial amigável</strong> antes da distribuição da petição inicial perante o Poder Judiciário. Utilize o termo para mostrar ao cliente que o contrato está na linha limite antes de se tornar um litígio judicial.
+                    </p>
+                </div>
+
+                <!-- Termo 2: Ajuizamento -->
+                <div class="card searchable-content" data-category="Jurídico: Ajuizamento">
+                    <span class="search-badge">Termo Jurídico • Ação Judicial</span>
+                    <h3>2. Ajuizamento</h3>
+                    <p style="font-size:0.92rem; color:#334155; line-height:1.7;">
+                        O <strong>Ajuizamento</strong> é uma ação judicial formal movida pela instituição financeira em razão do atraso prolongado. Não diminua o ajuizamento a uma taxa ou mera cobrança; o cliente precisa entender com clareza que <strong>está sendo processado judicialmente pelo banco</strong>.
+                    </p>
+                    <ul style="margin-top:10px;">
+                        <li><strong>Carteira FPD (First Payment Default):</strong> Notificação poderá ocorrer entre 31 e 60 dias de atraso (DPD), e ajuizamento com até 30 dias após retorno da notificação.</li>
+                        <li><strong>Carteira Regular e PJ:</strong> Notificação formal a partir de 90 DPD e ajuizamento a partir de 120 DPD.</li>
+                    </ul>
+                </div>
+
+                <!-- Termo 3: Custas Processuais -->
+                <div class="card searchable-content" data-category="Jurídico: Custas Processuais">
+                    <span class="search-badge">Termo Jurídico • Encargos</span>
+                    <h3>3. Custas Processuais</h3>
+                    <p style="font-size:0.92rem; color:#334155; line-height:1.7;">
+                        São todas as despesas decorrentes do andamento do processo judicial (taxas judiciárias, distribuição, diligências de oficial de justiça, editais e honorários sucumbenciais). <strong>Esses valores aumentam exponencialmente</strong> com o passar do tempo e são integralmente adicionados à dívida do financiado.
+                    </p>
+                </div>
+
+                <!-- Termo 4: Bloqueio Renajud -->
+                <div class="card searchable-content" data-category="Jurídico: Bloqueio Renajud">
+                    <span class="search-badge">Termo Jurídico • Restrição</span>
+                    <h3>4. Bloqueio Renajud</h3>
+                    <p style="font-size:0.92rem; color:#334155; line-height:1.7;">
+                        O <strong>Renajud</strong> é um sistema eletrônico que integra o Poder Judiciário ao Denatran/Detran. Por meio dele, o juiz insere restrições judiciais diretamente no prontuário do veículo, <strong>impedindo o cliente de transferir, vender, licenciar ou legalmente circular</strong> com o automóvel.
+                    </p>
+                </div>
+
+                <!-- Termo 5: Alienação Fiduciária -->
+                <div class="card searchable-content" data-category="Jurídico: Alienação Fiduciária">
+                    <span class="search-badge">Termo Jurídico • Propriedade</span>
+                    <h3>5. Alienação Fiduciária</h3>
+                    <p style="font-size:0.92rem; color:#334155; line-height:1.7;">
+                        Modalidade de garantia onde a <strong>propriedade do veículo pertence à GM Financial</strong> até a quitação da última parcela contratual. O cliente detém apenas a posse direta para uso. A falta de pagamento das parcelas quebra a posse e dá ao credor o direito legal de retomada imediata do bem.
+                    </p>
+                </div>
+
+                <!-- Termo 6: Busca e Apreensão -->
+                <div class="card searchable-content" data-category="Jurídico: Busca e Apreensão">
+                    <span class="search-badge">Termo Jurídico • Medida Liminar</span>
+                    <h3>6. Busca e Apreensão (Dec.-Lei 911/69)</h3>
+                    <p style="font-size:0.92rem; color:#334155; line-height:1.7;">
+                        Ação judicial em que o juiz concede liminar autorizando um oficial de justiça (com auxílio policial) a localizar e <strong>apreender fisicamente o veículo</strong> onde quer que ele se encontre. Após a apreensão, incidem despesas de guincho, pátio e honorários advocatícios (de 5% a 20%), além de o CPF permanecer negativado.
+                    </p>
+                </div>
+
+                <!-- Termo 7: Leilão e Saldo Remanescente -->
+                <div class="card searchable-content" data-category="Jurídico: Saldo Remanescente">
+                    <span class="search-badge">Termo Jurídico • Execução</span>
+                    <h3>7. Leilão & Saldo Remanescente</h3>
+                    <p style="font-size:0.92rem; color:#334155; line-height:1.7;">
+                        Após a retomada pela busca e apreensão, o banco destina o automóvel a leilão público para abater a dívida. Caso o valor de arrematação no leilão <strong>não seja suficiente para cobrir o total do financiamento somado às custas processuais</strong>, o contrato NÃO é extinto: o cliente continua legalmente responsável e sofrerá cobrança judicial do <strong>saldo remanescente</strong>.
+                    </p>
+                </div>
+            </section>
+
+            <!-- 5. SEGMENTO: DICAS DE ATENDIMENTO & NEGOCIAÇÃO -->
+            <section id="seg-dicas" class="segment-view">
+                <div class="segment-header">
+                    <h1>Dicas de Atendimento, Negociação & Indicadores</h1>
+                    <p>Princípios de persuasão, métricas operacionais e condutas de excelência.</p>
+                </div>
+
+                <div class="card searchable-content" data-category="Dicas: Indicadores">
+                    <span class="search-badge">Dicas & Métricas</span>
+                    <h3>Compreendendo Seus Indicadores Operacionais</h3>
+                    <ul>
+                        <li><strong>Contato Positivo (CP):</strong> Ocorre quando localizamos o titular ou terceiro responsável e realizamos a confirmação completa dos dados de segurança.</li>
+                        <li><strong>Taxa de Conversão:</strong> Quantidade de acordos gerados dividida pelo total de clientes contatados efetivamente. Se seus clientes pagam os acordos, mas você não atinge a meta, sua conversão está baixa.</li>
+                        <li><strong>Efetividade (Boleto Pago):</strong> Quantidade de pagamentos reais dividida pela quantidade de promessas firmadas. Se você gera muitos acordos, mas a maioria quebra antes da liquidação, sua efetividade está baixa.</li>
+                    </ul>
+                </div>
+
+                <div class="card searchable-content" data-category="Dicas: Condutas">
+                    <span class="search-badge">Dicas & Técnicas</span>
+                    <h3>Os 5 Pilares Comportamentais de Conversão</h3>
+                    <ul>
+                        <li><strong>1. Não esgote sua melhor proposta logo no início:</strong> Ofertar o desconto máximo de largada elimina sua margem de manobra caso o cliente recuse. Guarde alçada para a contraproposta.</li>
+                        <li><strong>2. Condução Firme e Sem Gírias:</strong> Mantenha tom de voz seguro e emocionalmente equilibrado. Evite gerundismos ("vamos estar verificando") e termos pejorativos.</li>
+                        <li><strong>3. Regra dos 30 Segundos no Mudo:</strong> Jamais deixe o cliente em silêncio absoluto. Retorne a cada 30 segundos informando que continua calculando as condições para evitar que ele desconfie de golpe ou desligue.</li>
+                        <li><strong>4. Venda os Benefícios do Acordo:</strong> Destaque o fim das ligações diárias, a preservação do nome nos órgãos de crédito, a retenção do veículo e a economia expressiva nos juros.</li>
+                        <li><strong>5. Silêncio Inteligente:</strong> Após apresentar o valor com desconto e questionar sobre a possibilidade de fechamento, faça silêncio e aguarde a resposta do cliente. Quem fala primeiro cede na negociação.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 6. SEGMENTO: TABULAÇÕES -->
+            <section id="seg-tabulacoes" class="segment-view">
+                <div class="segment-header">
+                    <h1>Códigos de Tabulação de Atendimento</h1>
+                    <p>Critérios obrigatórios para registro correto de ocorrências no sistema, evitando penalidades de NCG.</p>
+                </div>
+
+                <div class="tabulacao-card searchable-content" data-category="Tabulações: 508">
+                    <div class="tab-code">508</div>
+                    <div class="tab-content">
+                        <h4>508 – Queda de Ligação</h4>
+                        <p>Só deve ser registrado quando o cliente desligar a chamada antes da confirmação de dados, ou em casos de xingamentos imediatos e ruídos que impeçam a identificação do contato. Se houve diálogo com confirmação de dados, é proibido usar o 508 (configura NCG por tabulação incorreta).</p>
+                    </div>
+                </div>
+
+                <div class="tabulacao-card searchable-content" data-category="Tabulações: 2396">
+                    <div class="tab-code">2396</div>
+                    <div class="tab-content">
+                        <h4>2396 – Ligação Muda</h4>
+                        <p>Restrito exclusivamente para chamadas que permanecerem <strong>totalmente sem áudio</strong> desde o início do atendimento.</p>
+                    </div>
+                </div>
+
+                <div class="tabulacao-card searchable-content" data-category="Tabulações: Promessa">
+                    <div class="tab-code">PROMESSA</div>
+                    <div class="tab-content">
+                        <h4>Promessa de Pagamento</h4>
+                        <p>Registrar quando houver confirmação expressa do cliente de que realizará o pagamento na data e valor acordados, com envio do boleto.</p>
+                    </div>
+                </div>
+
+                <div class="tabulacao-card searchable-content" data-category="Tabulações: Sem Previsão">
+                    <div class="tab-code">SEM PREV.</div>
+                    <div class="tab-content">
+                        <h4>Sem Previsão de Pagamento</h4>
+                        <p>Utilizar quando o cliente recusar expressamente qualquer acordo após a exploração de todas as opções e a comunicação das sanções de cobrança.</p>
+                    </div>
+                </div>
+
+                <div class="tabulacao-card searchable-content" data-category="Tabulações: Alega Pagamento">
+                    <div class="tab-code">ALEGA PGTO</div>
+                    <div class="tab-content">
+                        <h4>Alega Pagamento</h4>
+                        <p>Utilizar quando o cliente afirmar que já quitou o débito ou quando solicitar realocação de parcela paga incorretamente.</p>
+                    </div>
+                </div>
+
+                <div class="tabulacao-card searchable-content" data-category="Tabulações: Recado Terceiro">
+                    <div class="tab-code">RECADO</div>
+                    <div class="tab-content">
+                        <h4>Recado com Terceiros</h4>
+                        <p>Quando o telefone for confirmado do titular, porém o atendimento ocorrer com um terceiro que aceita anotar os telefones de retorno.</p>
+                    </div>
+                </div>
+
+                <div class="tabulacao-card searchable-content" data-category="Tabulações: Cliente Desconhecido">
+                    <div class="tab-code">DESCONHECE</div>
+                    <div class="tab-content">
+                        <h4>Cliente Desconhecido</h4>
+                        <p>Quando a pessoa que atender informar que o telefone não pertence ao cliente titular do contrato de financiamento.</p>
+                    </div>
+                </div>
+
+                <div class="tabulacao-card searchable-content" data-category="Tabulações: Falecido">
+                    <div class="tab-code">FALECIDO</div>
+                    <div class="tab-content">
+                        <h4>Cliente Falecido</h4>
+                        <p>Quando o terceiro comunicar o óbito do titular e forem passadas as orientações de envio da certidão de óbito e MetLife.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. SEGMENTO: INSTITUCIONAL -->
+            <section id="seg-institucional" class="segment-view">
+                <div class="segment-header">
+                    <h1>Institucional & Parceria</h1>
+                    <p>Posicionamento e responsabilidades da GM Financial e Bulgarelli Advogados.</p>
+                </div>
+
+                <div class="card searchable-content" data-category="Institucional: GM e Bulgarelli">
+                    <span class="search-badge">Institucional</span>
+                    <h3>A Instituição Financeira e a Representação</h3>
+                    <p style="font-size:0.92rem; color:#334155; line-height:1.7; margin-bottom:12px;">
+                        A <strong>GM Financial</strong> é a instituição financeira oficial da General Motors no Brasil, atuando no financiamento de veículos novos e seminovos das concessionárias Chevrolet.
+                    </p>
+                    <p style="font-size:0.92rem; color:#334155; line-height:1.7; margin-bottom:12px;">
+                        A <strong>Bulgarelli Advogados</strong> é a assessoria jurídica parceira encarregada da recuperação de crédito amigável e extrajudicial, buscando soluções eficientes de regularização antes que o contrato atinja fases contenciosas de leilão e busca e apreensão.
+                    </p>
+                    <div style="background:#f0f9ff; border-left:4px solid var(--primary); padding:14px 18px; border-radius:0 8px 8px 0; font-size:0.9rem; color:#0369a1;">
+                        <strong>Regra de Abertura:</strong> O operador deve sempre apresentar-se como integrante da Bulgarelli Advogados atuando a serviço e em nome da GM Financial, preservando a transparência e conformidade normativa.
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- JAVASCRIPT: LÓGICA LINEAR, SUBSTITUIÇÃO LIMPA DE TELAS E PESQUISA GLOBAL -->
+    <script>
+        // Modal / Mural de Avisos
+        function openMural() {
+            document.getElementById('muralModal').classList.remove('hidden');
+        }
+
+        function closeMural() {
+            document.getElementById('muralModal').classList.add('hidden');
+        }
+
+        // Alternância do Menu Lateral
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-closed');
+        }
+
+        // Navegação entre Segmentos (Substituição Limpa de Telas)
+        function showSegment(segmentId) {
+            clearSearch();
+            
+            // Remove classe ativa de todos os botões e telas
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.segment-view').forEach(el => {
+                el.classList.remove('active');
+                el.style.display = 'none';
+            });
+
+            // Ativa o segmento selecionado
+            const targetSeg = document.getElementById('seg-' + segmentId);
+            if (targetSeg) {
+                targetSeg.classList.add('active');
+                targetSeg.style.display = 'block';
+            }
+
+            // Ativa o botão do menu
+            const targetBtn = document.getElementById('btn-nav-' + segmentId);
+            if (targetBtn) {
+                targetBtn.classList.add('active');
+            }
+
+            // Rola o container para o topo
+            const wrapper = document.querySelector('.main-wrapper');
+            if (wrapper) wrapper.scrollTop = 0;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Roteiro Linear: Avanço entre as 4 Etapas
+        function goToLinearStep(stepNumber) {
+            // Atualiza barra de progresso visual
+            for (let i = 1; i <= 4; i++) {
+                const node = document.getElementById('node-etapa-' + i);
+                const stage = document.getElementById('linear-stage-' + i);
+                
+                if (node) {
+                    node.classList.remove('active');
+                    if (i < stepNumber) {
+                        node.classList.add('completed');
+                    } else {
+                        node.classList.remove('completed');
+                    }
+
+                    if (i === stepNumber) {
+                        node.classList.add('active');
+                    }
+                }
+
+                if (stage) {
+                    stage.style.display = (i === stepNumber) ? 'block' : 'none';
+                }
+            }
+
+            // Garante que o segmento do Script esteja ativo
+            showSegment('script');
+            const wrapper = document.querySelector('.main-wrapper');
+            if (wrapper) wrapper.scrollTop = 0;
+        }
+
+        // Ramificações Dinâmicas Detalhadas dentro do Script Linear
+        function showBranchScript(type) {
+            let container, content = '';
+
+            // Estágio 1 Branches
+            if (type === 'terceiro_responsavel') {
+                container = document.getElementById('branch-script-box-1');
+                content = `
+                    <div class="card" style="border-left:4px solid var(--primary); margin-top:10px;">
+                        <h4>Fala com Terceiro Responsável pelo Pagamento:</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Bom dia/Boa tarde. Gostaria de falar com o(a) Sr.(a) [NOME RESPONSÁVEL]. Meu nome é [SEU PRIMEIRO NOME] do escritório Bulgarelli Advogados em nome da GM Financial. Este contato é gravado. O contato diz respeito ao cliente [NOME DO TITULAR]. O(a) senhor(a) é quem responde pelo pagamento? Para darmos continuidade, poderia informar os 6 primeiros dígitos do CPF do titular?"
+                            </div>
+                            <div class="script-side-alert critical">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">⚠️ Terceiro Responsável</span>
+                                    <span class="side-alert-badge crit">NCG - Zera</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li>Confirmar se responde pelo pagamento.</li>
+                                    <li>6 dígitos do CPF do titular + 1 pergunta de segurança do veículo.</li>
+                                    <li>Atualizar telefone e e-mail do responsável!</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button onclick="goToLinearStep(2)" style="margin-top:10px; padding:10px 16px; background:var(--primary); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer;">Avançar para Apresentação do Débito ➔</button>
+                    </div>`;
+            } else if (type === 'terceiro_recado') {
+                container = document.getElementById('branch-script-box-1');
+                content = `
+                    <div class="card" style="border-left:4px solid #3b82f6; margin-top:10px;">
+                        <h4>Fala para Deixar Recado com Terceiro (Telefone Confirmado):</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Sr.(a) [NOME TERCEIRO], meu nome é [SEU PRIMEIRO NOME] da Bulgarelli Advogados em nome da GM Financial. Por gentileza, o(a) senhor(a) poderia anotar um recado importante para que o(a) Sr.(a) [NOME CLIENTE] nos retorne no telefone gratuito 0800 056 2410 ou WhatsApp (11) 3185-8052? Nosso horário é de segunda a sexta das 08h às 20h e sábados das 08h às 14h. Qual seria o melhor horário para encontrá-lo(a)?"
+                            </div>
+                            <div class="script-side-alert info">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">🔒 Sigilo Bancário</span>
+                                    <span class="side-alert-badge inf">Regra</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li>NUNCA informe valores ou parcelas para quem não é responsável.</li>
+                                    <li>Pegar grau de parentesco e melhor horário.</li>
+                                    <li>Tabulação: <strong>RECADO COM TERCEIROS</strong>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'terceiro_desconhece') {
+                container = document.getElementById('branch-script-box-1');
+                content = `
+                    <div class="card" style="border-left:4px solid #64748b; margin-top:10px;">
+                        <h4>Fala para Telefone Incorreto (Cliente Desconhecido):</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Compreendo perfeitamente. Peço desculpas pelo transtorno. Vou registrar em nosso sistema a desvinculação deste número de telefone da ficha do contrato para que novos acionamentos não ocorram. Tenha um ótimo dia."
+                            </div>
+                            <div class="script-side-alert info">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">📞 Registro</span>
+                                    <span class="side-alert-badge inf">Procedimento</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li>Consultar se conhece outro número para contato com o titular.</li>
+                                    <li>Tabulação: <strong>CLIENTE DESCONHECIDO</strong>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'falecido') {
+                container = document.getElementById('branch-script-box-1');
+                content = `
+                    <div class="card" style="border-left:4px solid #1e293b; margin-top:10px;">
+                        <h4>Procedimento Completo para Cliente Falecido:</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Meus sinceros sentimentos à família. Para registrarmos o óbito no contrato e suspender as cobranças, peço por gentileza que nos informe a data do falecimento e encaminhe uma cópia da Certidão de Óbito para o e-mail oficial: documentos.cac@central.gmfinancial.com.<br><br>
+                                Em meu sistema consta que o contrato possui Seguro Prestamista contratado. Orientamos que a família entre em contato com a seguradora MetLife pelos telefones 3004-9329 ou 0800 727 9329 para abertura de sinistro de cobertura de saldo devedor."
+                            </div>
+                            <div class="script-side-alert info">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">🕊️ Procedimento Óbito</span>
+                                    <span class="side-alert-badge inf">Ocorrência</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li>Coletar data do óbito e nome do novo responsável.</li>
+                                    <li>Orientar envio da certidão para documentos.cac.</li>
+                                    <li>Informar MetLife (3004-9329 / 0800 727 9329).</li>
+                                    <li>Tabulação: <strong>CLIENTE FALECIDO</strong>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+            // Estágio 2 Branches
+            else if (type === 'alega_pago') {
+                container = document.getElementById('branch-script-box-2');
+                content = `
+                    <div class="card" style="border-left:4px solid #10b981; margin-top:10px;">
+                        <h4>Procedimento: Cliente Alega Pagamento</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Pode me confirmar a data em que o pagamento foi realizado e o valor exato pago?"
+                                <ul style="font-size:0.9rem; line-height:1.6; color:#334155; margin-top:10px;">
+                                    <li><strong>Pago há MENOS de 2 dias úteis:</strong> Prazo de compensação é de até 2 dias úteis. Agradeça e encerre cordialmente.</li>
+                                    <li><strong>Pago há MAIS de 2 dias úteis:</strong> Peça envio de cópia do boleto pago, comprovante com autenticação e relato para <em>documentos.cac@central.gmfinancial.com</em> e cópia ao escritório.</li>
+                                    <li><strong>Fraude identificada no boleto:</strong> Se o boleto pago não pertence ao Banco GM, o escritório pode solicitar exceção de abono de juros e honorários daquela parcela mediante envio das evidências.</li>
+                                </ul>
+                            </div>
+                            <div class="script-side-alert info">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">🧾 Pagamento</span>
+                                    <span class="side-alert-badge inf">Alerta</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li>Preencher data e valor pago no sistema.</li>
+                                    <li>Avisar que ações continuam até a baixa efetiva.</li>
+                                    <li>Tabulação: <strong>ALEGA PAGAMENTO</strong>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'quer_pagar_imediato') {
+                container = document.getElementById('branch-script-box-2');
+                content = `
+                    <div class="card" style="border-left:4px solid var(--primary); margin-top:10px;">
+                        <h4>Cliente Quer Pagar de Imediato (Sem Objeção):</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                <ul style="font-size:0.9rem; line-height:1.6; color:#334155;">
+                                    <li><strong>Se possui o boleto em mãos:</strong> Confirme se o pagamento será realizado hoje. Se quiser reenvio, envie o código de barras ou PDF e tabule <em>REENVIO DE BOLETO</em>.</li>
+                                    <li><strong>Não tem o boleto em mãos:</strong> Gere o boleto com vencimento acordado, selecione o canal (WhatsApp ou E-mail) e avance para o Passo 4. Tabule <em>PROMESSA DE PAGAMENTO</em>.</li>
+                                    <li><strong>Alega que não recebeu o carnê original:</strong> Esclareça que a GM Financial não disponibiliza carnê físico e que as vias são enviadas por e-mail ou geradas no site www.gmfinancial.com.br.</li>
+                                </ul>
+                            </div>
+                            <div class="script-side-alert info">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">⚡ Fechamento Rápido</span>
+                                    <span class="side-alert-badge inf">Passo 4</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li><span class="side-alert-highlight">ATENÇÃO:</span> Mesmo pagando no ato, você DEVE repassar as orientações Antifraude (início 34191, sem Pix) e Sanções contratuais!</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button onclick="goToLinearStep(4)" style="margin-top:12px; padding:10px 18px; background:var(--primary); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer;">Avançar para Fechamento & Antifraude (Passo 4) ➔</button>
+                    </div>`;
+            } else if (type === 'promessa_futura') {
+                container = document.getElementById('branch-script-box-2');
+                content = `
+                    <div class="card" style="border-left:4px solid #f59e0b; margin-top:10px;">
+                        <h4>Promessa para Data Futura:</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Se a data estiver dentro da frequência histórica de pagamento ou no prazo D+2, podemos fixar a promessa. Para datas mais distantes, precisamos verificar com a supervisão para evitar o risco de acionamentos judiciais no período."
+                            </div>
+                            <div class="script-side-alert">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">📅 Regra D+2</span>
+                                    <span class="side-alert-badge warn">Monitoria</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li>Aceitar dentro de histórico ou prazo D+2.</li>
+                                    <li>Gerar vencimento acordado.</li>
+                                    <li>Avançar para o Fechamento Antifraude.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button onclick="goToLinearStep(4)" style="margin-top:12px; padding:10px 18px; background:var(--primary); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer;">Formalizar Fechamento Antifraude ➔</button>
+                    </div>`;
+            } else if (type === 'mes_invertido') {
+                container = document.getElementById('branch-script-box-2');
+                content = `
+                    <div class="card" style="border-left:4px solid #8b5cf6; margin-top:10px;">
+                        <h4>Antecipação do Mês (Mês Invertido):</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Identificamos que houve o pagamento da parcela futura em vez da mais antiga. Caso o senhor tenha efetuado o pagamento do mês 10 no mês 08 e esteja entrando em contato ainda no mês 08, direcionamos o estorno em até 7 dias úteis. Caso já estejamos no mês 09, a parcela 08 continua pendente e deve ser quitada, não havendo boleto de cobrança no mês 10."
+                            </div>
+                            <div class="script-side-alert info">
+                                <div class="side-alert-header">
+                                    <span class="side-alert-title">🔄 Mês Invertido</span>
+                                    <span class="side-alert-badge inf">Regra GM</span>
+                                </div>
+                                <ul class="side-alert-list">
+                                    <li>Mês anterior: Estorno em 7 dias úteis.</li>
+                                    <li>Mês atual: Paga a mais antiga; a futura já está quitada.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+            // Estágio 3 Branches (Objeções Detalhadas - Grupos A e B)
+            else if (type === 'obj_juros') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #ef4444; margin-top:10px;">
+                        <h4>Reclamação: Questionamento de Juros, Multa e Honorários:</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Sr.(a) [NOME], a incidência de juros moratórios e multa por atraso está prevista expressamente em seu contrato de financiamento assinado e é regulada pelo Banco Central do Brasil. O atraso gera juros moratórios de 0,433% ao dia, multa de 2% (respaldada pelo Código de Defesa do Consumidor) e honorários advocatícios a partir de 16 dias de atraso. Consigo hoje aplicar uma condição de campanha para amenizar esses encargos mediante seu pagamento."
+                            </div>
+                            <div class="script-side-alert">
+                                <div class="side-alert-header"><span class="side-alert-title">⚖️ Base Legal</span><span class="side-alert-badge warn">Contrato</span></div>
+                                <ul class="side-alert-list">
+                                    <li>Juros: 0,433% ao dia.</li>
+                                    <li>Multa: 2% (Art. 52 CDC).</li>
+                                    <li>Honorários: após 16 dias.</li>
+                                    <li>Use os valores para demonstrar o benefício do acordo!</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'obj_excesso_ligacoes') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #f59e0b; margin-top:10px;">
+                        <h4>Reclamação: Excesso de Ligações:</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Compreendo seu incômodo, Sr.(a) [NOME]. Esclareço que nossos acionamentos estão em estrita conformidade com a legislação vigente e ocorrem diariamente visando alertá-lo para evitar o ajuizamento da ação. Uma vez que confirmamos seu atendimento e formalizamos uma proposta hoje, os acionamentos telefônicos são imediatamente cessados para o dia de hoje."
+                            </div>
+                            <div class="script-side-alert info">
+                                <div class="side-alert-header"><span class="side-alert-title">📞 Ligações</span><span class="side-alert-badge inf">Regra</span></div>
+                                <ul class="side-alert-list">
+                                    <li>Confirmou dados = Acionamentos cessados no dia.</li>
+                                    <li>Reforçar que o objetivo é evitar a busca e apreensão.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'obj_alterar_vencimento') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #3b82f6; margin-top:10px;">
+                        <h4>Proposta: Alteração de Data de Vencimento do Contrato:</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Para solicitar a alteração da data de vencimento original das parcelas futuras, é requisito obrigatório regularizar todas as parcelas em atraso primeiro. Após a baixa, o senhor poderá contatar a Central GM. O procedimento pode ser realizado até 2 vezes na vigência do contrato e haverá cobrança da taxa de deslocamento para cobrir o período prorrogado."
+                            </div>
+                            <div class="script-side-alert info">
+                                <div class="side-alert-header"><span class="side-alert-title">📅 Vencimento</span><span class="side-alert-badge inf">Regra GM</span></div>
+                                <ul class="side-alert-list">
+                                    <li>Obrigatório quitar atraso primeiro.</li>
+                                    <li>Máximo 2x durante todo o contrato.</li>
+                                    <li>Taxa de deslocamento única e obrigatória.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'obj_realocacao') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #10b981; margin-top:10px;">
+                        <h4>Proposta: Realocação de Pagamento:</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Verificamos se o pagamento foi realizado dentro do mês até o vencimento da parcela em atraso. Em caso positivo, direcionamos as informações para a gestão da GM Financial para análise de realocação. Ressaltamos que as ações de cobrança permanecerão ativas até a conclusão da análise pelo Banco."
+                            </div>
+                            <div class="script-side-alert info">
+                                <div class="side-alert-header"><span class="side-alert-title">🔄 Realocação</span><span class="side-alert-badge inf">Tabulação</span></div>
+                                <ul class="side-alert-list">
+                                    <li>Checar se pago dentro do mês de vencimento.</li>
+                                    <li>Tabulação: <strong>ALEGA PAGAMENTO</strong>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'obj_pagamento_parcial') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #ef4444; margin-top:10px;">
+                        <h4>Proposta: Pagamento Parcial (Não Elegível):</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Sr.(a) [NOME], o acúmulo de parcelas sem pagamento caracteriza descumprimento contratual. Conforme a Cláusula G das Condições Gerais do seu contrato e a legislação vigente, a GM Financial reserva-se ao direito de não aceitar pagamentos parciais, estando autorizada a receber apenas a atualização integral das parcelas vencidas."
+                            </div>
+                            <div class="script-side-alert">
+                                <div class="side-alert-header"><span class="side-alert-title">📜 Cláusula G</span><span class="side-alert-badge warn">Contrato</span></div>
+                                <ul class="side-alert-list">
+                                    <li>Exigência contratual de quitação total do atraso.</li>
+                                    <li>Orientar consulta às Condições Gerais no site GM.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'obj_carro_terceiro') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #6366f1; margin-top:10px;">
+                        <h4>Reclamação: Veículo em Posse de Terceiro:</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Sr.(a) [NOME], a entrega ou venda do veículo a terceiros sem a anuência prévia e formal da GM Financial (sem cessão de contrato) constitui grave descumprimento contratual e poderá ensejar ajuizamento imediato. Esse repasse não isenta o(a) senhor(a) da responsabilidade pelo pagamento total do financiamento nem das restrições em seu CPF."
+                            </div>
+                            <div class="script-side-alert">
+                                <div class="side-alert-header"><span class="side-alert-title">🚗 Terceiro</span><span class="side-alert-badge warn">Registro</span></div>
+                                <ul class="side-alert-list">
+                                    <li>Colher nome, parentesco e telefone do terceiro.</li>
+                                    <li>Pedir autorização para contato com terceiro.</li>
+                                    <li>Tabulação: <strong>VEÍCULO COM TERCEIRO SEM PREVISÃO</strong>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'obj_consultoria') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #ec4899; margin-top:10px;">
+                        <h4>Reclamação: Cliente Contratou Consultoria Externa / Escritório Revisional:</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Sr.(a) [NOME], informo que a GM Financial não autoriza nem realiza negociações por intermédio de empresas de consultoria ou assessorias externas; todos os acordos devem ser feitos diretamente com o titular. Enquanto não houver formalização amigável conosco, as ações de cobrança e as medidas judiciais de busca e apreensão continuam ativas."
+                            </div>
+                            <div class="script-side-alert critical">
+                                <div class="side-alert-header"><span class="side-alert-title">⚠️ Consultoria</span><span class="side-alert-badge crit">Alerta</span></div>
+                                <ul class="side-alert-list">
+                                    <li>GM NÃO negocia com intermediários.</li>
+                                    <li>Alertar que a busca e apreensão continua correndo.</li>
+                                    <li>Ofertar condições amigáveis diretamente com o titular.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'obj_desemprego') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #14b8a6; margin-top:10px;">
+                        <h4>Reclamação: Motivo do Atraso é Desemprego (Com Seguro Prestamista):</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Sr.(a) [NOME], identifiquei em meu sistema que o seu contrato de financiamento inclui o Seguro Prestamista. Orientamos que o senhor contate com urgência a seguradora MetLife pelos telefones 3004-9329 (capitais) ou 0800 727 9329 para abrir o sinistro de cobertura por perda involuntária de emprego e estancar as ações de cobrança."
+                            </div>
+                            <div class="script-side-alert info">
+                                <div class="side-alert-header"><span class="side-alert-title">💼 MetLife</span><span class="side-alert-badge inf">Prestamista</span></div>
+                                <ul class="side-alert-list">
+                                    <li>Telefones: 3004-9329 ou 0800 727 9329.</li>
+                                    <li>Abrir sinistro para cobertura das parcelas.</li>
+                                    <li>Avisar que seguro não cobre vencidos antes do fato.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'obj_quita_mais') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #3b82f6; margin-top:10px;">
+                        <h4>Proposta: Oferta de Acordo via Quita+ (Cartão de Crédito):</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Temos uma excelente alternativa através da plataforma parceira Quita+, que permite liquidar a dívida de atualização ou quitação parcelando no cartão de crédito em até 21 vezes, podendo inclusive dividir o valor em mais de um cartão para não comprometer seu limite. Ao aceitar, o débito com a GM é quitado imediatamente."
+                            </div>
+                            <div class="script-side-alert info">
+                                <div class="side-alert-header"><span class="side-alert-title">💳 Quita+</span><span class="side-alert-badge inf">Cartão</span></div>
+                                <ul class="side-alert-list">
+                                    <li>Parcelamento em até 21x.</li>
+                                    <li>Pode usar mais de 1 cartão de crédito.</li>
+                                    <li>Plataforma parceira independente.</li>
+                                    <li>Envio de link oficial.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'obj_devolucao') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #8b5cf6; margin-top:10px;">
+                        <h4>Proposta: Devolução Amigável do Veículo:</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Quando não há capacidade financeira para manter o financiamento, a Devolução Amigável é a solução mais assertiva. Ela evita as custas processuais, o mandado de busca e apreensão e o constrangimento judicial. O veículo é entregue de forma espontânea, seu nome é excluído dos órgãos de proteção em até 5 dias úteis e o valor do bem é utilizado para abater ou quitar seu saldo devedor."
+                                <ul style="font-size:0.88rem; color:#334155; line-height:1.6; margin-top:8px;">
+                                    <li><strong>Com Anistia:</strong> Liquidação total do contrato e quitação de IPVA/multas sem saldo residual.</li>
+                                    <li><strong>Sem Anistia:</strong> O veículo vai a leilão e abate o saldo; se houver saldo remanescente, este é cobrado.</li>
+                                </ul>
+                            </div>
+                            <div class="script-side-alert">
+                                <div class="side-alert-header"><span class="side-alert-title">🚗 Devolução</span><span class="side-alert-badge warn">Opção</span></div>
+                                <ul class="side-alert-list">
+                                    <li>Exclusão Serasa em até 5 dias úteis.</li>
+                                    <li>Evita processo judicial e custos de guincho/pátio.</li>
+                                    <li>Explicar leilão e saldo remanescente.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'obj_extensao') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #f97316; margin-top:10px;">
+                        <h4>Proposta: Extensão / Prorrogação de Financiamento:</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Mediante elegibilidade e seu interesse, encaminhamos o pedido de extensão para análise da GM Financial. Toda comunicação será via WhatsApp cadastrado. Há incidência de taxa de deslocamento diluída nas parcelas futuras, e a assinatura digital do termo de aceite deve ocorrer impreterivelmente em até 03 dias úteis para validação."
+                            </div>
+                            <div class="script-side-alert info">
+                                <div class="side-alert-header"><span class="side-alert-title">⏳ Extensão</span><span class="side-alert-badge inf">Prazo</span></div>
+                                <ul class="side-alert-list">
+                                    <li>Assinatura do termo em até 3 dias úteis.</li>
+                                    <li>Comunicação via WhatsApp oficial.</li>
+                                    <li>Taxa diluída nas parcelas futuras.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'obj_renegociacao') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #06b6d4; margin-top:10px;">
+                        <h4>Proposta: Renegociação do Financiamento:</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Qual o valor de parcela mensal que o senhor consegue assumir hoje? Encaminharemos sua proposta para avaliação da GM Financial com retorno em até 02 dias úteis por e-mail. Caso aprovada, haverá incidência de IOF que deve ser pago via boleto em até 02 dias úteis juntamente com o aceite do termo. Sem o pagamento do IOF, a proposta é cancelada."
+                            </div>
+                            <div class="script-side-alert">
+                                <div class="side-alert-header"><span class="side-alert-title">📝 Renegociação</span><span class="side-alert-badge warn">Regra</span></div>
+                                <ul class="side-alert-list">
+                                    <li>Resposta GM em até 2 dias úteis.</li>
+                                    <li>Boleto de IOF pago em até 2 dias úteis.</li>
+                                    <li>Permitido 1 única vez no contrato.</li>
+                                    <li>Parcela GAP não entra na renegociação.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'obj_desconhece_divida') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #ef4444; margin-top:10px;">
+                        <h4>Reclamação: Cliente Desconhece a Dívida (Fraude):</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Como o(a) senhor(a) não reconhece a contratação deste financiamento, a orientação da GM Financial é que registre imediatamente um Boletim de Ocorrência policial e envie a cópia para documentos.cac@central.gmfinancial.com. Ressaltamos que as ações de cobrança permanecem ativas no sistema até a conclusão da auditoria."
+                            </div>
+                            <div class="script-side-alert critical">
+                                <div class="side-alert-header"><span class="side-alert-title">🚨 Fraude / B.O.</span><span class="side-alert-badge crit">Alerta</span></div>
+                                <ul class="side-alert-list">
+                                    <li>Orientar envio de B.O. para documentos.cac.</li>
+                                    <li>Avisar que cobrança permanece ativa até análise.</li>
+                                    <li>Tabulação: <strong>DESCONHECE A DÍVIDA</strong>.</li>
+                                    <li>Sinalizar à supervisão imediatamente.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'obj_acao_contraria') {
+                container = document.getElementById('branch-script-box-3');
+                content = `
+                    <div class="card" style="border-left:4px solid #f59e0b; margin-top:10px;">
+                        <h4>Reclamação: Cliente Alega Ação Contrária / Judicial em Curso:</h4>
+                        <div class="script-grid-row">
+                            <div class="speech-box">
+                                "Senhor(a), solicito gentilmente que informe os dados da ação para registro: número do processo, comarca e vara correspondente. Informo que as ações de cobrança permanecerão ativas até a citação e notificação legal do Banco. Gostaria de verificar uma proposta amigável hoje para evitar os custos do litígio?"
+                            </div>
+                            <div class="script-side-alert info">
+                                <div class="side-alert-header"><span class="side-alert-title">⚖️ Ação Contrária</span><span class="side-alert-badge inf">Registro</span></div>
+                                <ul class="side-alert-list">
+                                    <li>Coletar processo, vara e comarca.</li>
+                                    <li>Avisar que cobrança segue até notificação formal.</li>
+                                    <li>Tabulação: <strong>ALEGA AÇÃO CONTRÁRIA</strong>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+            if (container) {
+                container.innerHTML = content;
+                container.style.display = 'block';
+                container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // PESQUISA GLOBAL UNIFICADA (OMNIPRESENTE)
+        function handleGlobalSearch() {
+            const query = document.getElementById('globalSearchInput').value.toLowerCase().trim();
+            const resultsPanel = document.getElementById('search-results-panel');
+            const matchesContainer = document.getElementById('search-matches-list');
+            const termDisplay = document.getElementById('search-term-display');
+
+            if (query === '') {
+                clearSearch();
+                return;
+            }
+
+            termDisplay.innerText = query;
+            resultsPanel.style.display = 'block';
+
+            // Oculta todas as telas para mostrar a pesquisa completa
+            document.querySelectorAll('.segment-view').forEach(s => {
+                s.style.display = 'none';
+                s.classList.remove('active');
+            });
+
+            // Coleta todos os blocos pesquisáveis
+            const searchableItems = document.querySelectorAll('.searchable-content');
+            let resultsHtml = '';
+            let count = 0;
+
+            searchableItems.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    count++;
+                    const category = item.getAttribute('data-category') || 'Conteúdo Operacional';
+                    const clone = item.cloneNode(true);
+                    
+                    resultsHtml += `
+                        <div class="card" style="margin-bottom:16px; border-left:4px solid var(--primary);">
+                            <span class="search-badge">${category}</span>
+                            ${clone.innerHTML}
+                        </div>`;
+                }
+            });
+
+            if (count === 0) {
+                matchesContainer.innerHTML = `
+                    <div style="text-align:center; padding:30px; color:var(--text-muted);">
+                        Nenhum resultado encontrado para "<strong>${query}</strong>". Tente buscar por palavras-chave como <em>Antifraude, Ajuizamento, Desconto progressivo, Não acordo, 508, Quita+, Renajud, Falecido</em>.
+                    </div>`;
+            } else {
+                matchesContainer.innerHTML = resultsHtml;
+            }
+
+            const wrapper = document.querySelector('.main-wrapper');
+            if (wrapper) wrapper.scrollTop = 0;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function quickSearch(tag) {
+            closeMural();
+            const input = document.getElementById('globalSearchInput');
+            input.value = tag;
+            handleGlobalSearch();
+        }
+
+        function clearSearch() {
+            document.getElementById('globalSearchInput').value = '';
+            document.getElementById('search-results-panel').style.display = 'none';
+            document.getElementById('search-matches-list').innerHTML = '';
+            
+            // Restaura o segmento ativo
+            const activeNav = document.querySelector('.nav-link.active');
+            if (activeNav) {
+                const segId = activeNav.id.replace('btn-nav-', '');
+                const targetSeg = document.getElementById('seg-' + segId);
+                if (targetSeg) {
+                    targetSeg.style.display = 'block';
+                    targetSeg.classList.add('active');
+                }
+            }
+        }
+
+        // Ao carregar a página, abre o mural de avisos automaticamente
+        window.addEventListener('DOMContentLoaded', () => {
+            openMural();
+        });
+    </script>
+</body>
+</html>
